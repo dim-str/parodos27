@@ -44,6 +44,7 @@ public class OrderController {
         return orderRepository.findById(id).map(order -> {
             order.setStatus(updatedOrder.getStatus());
             order.setNotes(updatedOrder.getNotes());
+            order.setEstimatedReadyTime(updatedOrder.getEstimatedReadyTime());
             CustomerOrder savedOrder = orderRepository.save(order);
             messagingTemplate.convertAndSend("/topic/orderUpdates", savedOrder);
             return ResponseEntity.ok(savedOrder);

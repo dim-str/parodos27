@@ -18,6 +18,8 @@ public class CustomerOrder {
     private String customerName;
     private int quantity;
 
+    private String estimatedReadyTime;
+
     @ManyToOne
     @JoinColumn(name = "dish_id")
     private Dish dish;
@@ -53,4 +55,7 @@ public class CustomerOrder {
 
     public java.time.LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(java.time.LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public String getEstimatedReadyTime() { return estimatedReadyTime; }
+    public void setEstimatedReadyTime(String estimatedReadyTime) { this.estimatedReadyTime = estimatedReadyTime; }
 }
