@@ -1,26 +1,24 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+    /* Εδώ ορίζουμε την παλέτα της ελιάς (Olive) για το Tailwind v4 */
+    --color-olive-50: #f7f8f3;
+    --color-olive-100: #edf0e7;
+    --color-olive-200: #dbe1d0;
+    --color-olive-500: #808000;
+    --color-olive-600: #6b8e23;
+    --color-olive-700: #556b2f;
+    --color-olive-800: #3e4e22;
+    --color-olive-900: #2d3819;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Βασικό φόντο της εφαρμογής */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    color: var(--color-olive-900);
+    background: linear-gradient(
+            to bottom,
+            var(--color-olive-50),
+            var(--color-olive-100)
+    );
+    min-height: 100vh;
 }
