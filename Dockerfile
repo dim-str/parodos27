@@ -2,18 +2,21 @@
 FROM maven:3.8.5-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Αντιγράφουμε τα αρχεία από τον φάκελο backend
-COPY backend/pom.xml ./backend/
-COPY backend/src ./backend/src
+# Αντιγράφουμε ΤΑ ΠΑΝΤΑ από το repository μέσα στο container
+COPY . .
 
-# Μπαίνουμε μέσα στον φάκελο για το build
+# Μπαίνουμε στον φάκελο backend (εκεί που είναι το pom.xml)
 WORKDIR /app/backend
+
+# Χτίζουμε το project
 RUN mvn clean package -DskipTests
 
 # Στάδιο 2: Εκτέλεση
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-# Προσοχή: το jar παράγεται μέσα στο backend/target
+
+# Παίρνουμε το έτοιμο jar από τον φάκελο που χτίστηκε
 COPY --from=build /app/backend/target/*.jar app.jar
+
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
