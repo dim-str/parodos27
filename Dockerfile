@@ -1,21 +1,21 @@
 # Στάδιο 1: Χτίσιμο
-FROM maven:3.8.5-eclipse-temurin-17 AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Αντιγράφουμε τα πάντα από το repository
+# Αντιγράφουμε τα πάντα
 COPY . .
 
-# Μπαίνουμε στη σωστή διαδρομή (διπλό backend)
+# Μπαίνουμε στο σωστό βάθος του φακέλου
 WORKDIR /app/backend/backend
 
-# Χτίζουμε το project
+# Χτίζουμε το jar αγνοώντας τα tests
 RUN mvn clean package -DskipTests
 
 # Στάδιο 2: Εκτέλεση
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Παίρνουμε το jar από τη νέα σωστή διαδρομή
+# Αντιγραφή του παραγόμενου jar
 COPY --from=build /app/backend/backend/target/*.jar app.jar
 
 EXPOSE 8080
