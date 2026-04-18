@@ -32,8 +32,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // ΤΕΛΟΣ ΤΟ ΑΣΤΕΡΑΚΙ (*). Βάζουμε τις ακριβείς διευθύνσεις για να περάσουν τα WebSockets!
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://192.168.1.67:3000"));
+        configuration.setAllowedOrigins(List.of("https://parodos27.vercel.app"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         // ΕΠΙΤΡΕΠΟΥΜΕ ΤΑ CREDENTIALS (Απαραίτητο για το Next.js & SockJS)
