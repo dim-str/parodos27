@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { setupAxiosAuth } from '@/lib/setupAxiosAuth';
+import { resolveSockJsUrl } from '@/lib/wsUrl';
 import {
     CheckCircle, Trash2, RefreshCcw, Search,
     Plus, Edit3, Settings, BarChart3, Clock, BookOpen, Bell, X,
@@ -150,7 +151,7 @@ export default function AdminDashboard() {
         void fetchDishes();
 
         const client = new Client({
-            webSocketFactory: () => new SockJS(process.env.NEXT_PUBLIC_WS_URL || `${process.env.NEXT_PUBLIC_API_URL}/ws-orders`),
+            webSocketFactory: () => new SockJS(resolveSockJsUrl()),
             reconnectDelay: 5000,
             onConnect: () => {
                 setWsConnected(true);

@@ -27,9 +27,8 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const menuRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dishes?t=${new Date().getTime()}`);
-                const activeDishesOnly = menuRes.data.filter(dish => dish.active === true || dish.active === "true");
-                setDailyMenu(activeDishesOnly);
+                const menuRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dishes/active?t=${new Date().getTime()}`);
+                setDailyMenu(menuRes.data);
 
                 const settingsRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/settings?t=${new Date().getTime()}`);
                 if (settingsRes.data) {

@@ -33,7 +33,7 @@ export default function CartDrawer() {
     useEffect(() => {
         const fetchQuickItems = async () => {
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dishes`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dishes/active`);
                 setQuickItemsData(response.data.filter(dish => QUICK_ITEM_IDS.includes(dish.id)));
             } catch (error) { console.error("Σφάλμα γρήγορων προϊόντων"); }
         };

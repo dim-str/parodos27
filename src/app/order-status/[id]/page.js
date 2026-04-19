@@ -11,8 +11,8 @@ export default function OrderStatusPage({ params }) {
     useEffect(() => {
         const fetchStatus = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/orders`);
-                const myOrder = res.data.find(o => o.id.toString() === id);
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/orders/${id}`);
+                const myOrder = res.data;
 
                 if (myOrder) {
                     setOrderInfo(myOrder);

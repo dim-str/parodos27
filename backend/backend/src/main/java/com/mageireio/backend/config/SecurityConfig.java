@@ -37,6 +37,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dishes").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dishes/active").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/settings").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/orders").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/orders/*").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
