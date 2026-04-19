@@ -34,19 +34,32 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         if (request == null || request.password() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid credentials - no password sent"));
         }
 
-        boolean passwordMatches = MessageDigest.isEqual(
-                request.password().trim().getBytes(StandardCharsets.UTF_8),
-                adminPassword.trim().getBytes(StandardCharsets.UTF_8)
-        );
+        // Καθαρίζουμε τυχόν κρυφά κενά (spaces) δεξιά κι αριστερά
+        String inputPass = request.password().trim();
+        String expectedPass = adminPassword.trim();
 
-        if (!passwordMatches) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
+        // --- ΜΗΧΑΝΙΣΜΟΣ DEBUGGING (Θα το δεις στα Logs του Render) ---
+        System.out.println("===== ΕΛΕΓΧΟΣ LOGIN =====");
+        System.out.println("Ο κωδικός που έστειλε το Next.js είναι: [" + inputPass + "]");
+        System.out.println("Ο κωδικός που περιμένει η Java είναι:   [" + expectedPass + "]");
+        System.out.println("Είναι ολόιδιοι; -> " + inputPass.equals(expectedPass));
+        System.out.println("=========================");
+
+        // Απλή σύγκριση για τώρα (το MessageDigest είναι τέλειο, αλλά ας βρούμε το λάθος πρώτα)
+        if (!inputPass.equals(expectedPass)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("success", false, "message", "Invalid credentials"));
         }
 
         String token = jwtService.generateToken(adminUsername);
-        return ResponseEntity.ok(new AuthResponse(token, "Bearer", jwtService.getExpirationMs()));
+        // Επιστρέφουμε και το "success": true για να βολευτεί το Next.js
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "token", token,
+                "type", "Bearer"
+        ));
     }
 }
