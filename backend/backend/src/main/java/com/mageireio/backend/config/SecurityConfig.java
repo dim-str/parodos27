@@ -33,7 +33,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("https://parodos27.vercel.app"));
+        configuration.setAllowedOrigins(List.of("https://parodos27.vercel.app",
+                                                "http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         // ΕΠΙΤΡΕΠΟΥΜΕ ΤΑ CREDENTIALS (Απαραίτητο για το Next.js & SockJS)
