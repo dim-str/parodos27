@@ -7,6 +7,9 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Bike, Phone, MapPin, CheckCircle, RefreshCcw, Navigation, Lock, X } from 'lucide-react';
+import { setupAxiosAuth } from '@/lib/setupAxiosAuth';
+
+setupAxiosAuth();
 
 export default function DeliveryApp() {
     // --- STATE MANAGEMENT ---
@@ -23,6 +26,9 @@ export default function DeliveryApp() {
                 const res = await axios.get('/api/auth/check');
                 if (res.data.authenticated) {
                     setAuthToken(res.data.token || '');
+                    if (res.data.token) {
+                        localStorage.setItem('admin_jwt', res.data.token);
+                    }
                     setIsAuthenticated(true);
                 }
             } catch (e) {
@@ -63,7 +69,10 @@ export default function DeliveryApp() {
             // Χρησιμοποιούμε το ίδιο endpoint με το Admin
             const res = await axios.post('/api/auth/login', { password: passwordInput });
             if (res.data.success) {
-                setAuthToken(res.data.key || '');
+                setAuthToken(res.data.token || '');
+                if (res.data.token) {
+                    localStorage.setItem('admin_jwt', res.data.token);
+                }
                 setIsAuthenticated(true);
                 toast.success("Επιτυχής Σύνδεση!");
             }
@@ -77,6 +86,7 @@ export default function DeliveryApp() {
         try {
             await axios.post('/api/auth/logout');
             setAuthToken('');
+            localStorage.removeItem('admin_jwt');
             setIsAuthenticated(false);
             window.location.reload();
         } catch (e) {

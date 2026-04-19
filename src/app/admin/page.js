@@ -8,12 +8,15 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import { setupAxiosAuth } from '@/lib/setupAxiosAuth';
 import {
     CheckCircle, Trash2, RefreshCcw, Search,
     Plus, Edit3, Settings, BarChart3, Clock, BookOpen, Bell, X,
     ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Printer, Volume2, VolumeX, Lock, Trophy, Timer,
     MapPin, Bike, Check, TrendingUp, TrendingDown, Users, Wallet, Percent, Award, Footprints, AlertCircle
 } from 'lucide-react';
+
+setupAxiosAuth();
 
 const COMMON_EXTRAS = [
     "Πατάτες Τηγανητές", "Πατάτες Φούρνου", "Ρύζι", "Πουρές",
@@ -118,6 +121,9 @@ export default function AdminDashboard() {
                 const res = await axios.get('/api/auth/check');
                 if (res.data.authenticated) {
                     setAuthToken(res.data.token || '');
+                    if (res.data.token) {
+                        localStorage.setItem('admin_jwt', res.data.token);
+                    }
                     setIsAuthenticated(true);
                 }
             } catch (e) {
@@ -414,7 +420,10 @@ export default function AdminDashboard() {
         try {
             const res = await axios.post('/api/auth/login', { password: passwordInput });
             if (res.data.success) {
-                setAuthToken(res.data.key || '');
+                setAuthToken(res.data.token || '');
+                if (res.data.token) {
+                    localStorage.setItem('admin_jwt', res.data.token);
+                }
                 setIsAuthenticated(true);
                 toast.success("Επιτυχής Σύνδεση!");
             }
@@ -428,6 +437,7 @@ export default function AdminDashboard() {
         try {
             await axios.post('/api/auth/logout');
             setAuthToken('');
+            localStorage.removeItem('admin_jwt');
             setIsAuthenticated(false);
             window.location.reload();
         } catch (e) {

@@ -3,14 +3,14 @@ import { cookies } from 'next/headers';
 
 export async function GET() {
     try {
-        // --- FIX ΓΙΑ NEXT.JS 16 ---
         const cookieStore = await cookies();
-        const hasCookie = cookieStore.get('admin_auth');
+        const jwtCookie = cookieStore.get('admin_jwt');
 
-        if (hasCookie) {
-            return NextResponse.json({ authenticated: true, token: process.env.ADMIN_SECRET_KEY });
+        if (!jwtCookie?.value) {
+            return NextResponse.json({ authenticated: false }, { status: 401 });
         }
-        return NextResponse.json({ authenticated: false }, { status: 401 });
+
+        return NextResponse.json({ authenticated: true, token: jwtCookie.value });
     } catch (error) {
         return NextResponse.json({ authenticated: false }, { status: 500 });
     }
